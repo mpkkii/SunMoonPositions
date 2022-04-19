@@ -1,6 +1,3 @@
-
-from cmath import sqrt
-from turtle import fillcolor
 import folium
 from PIL import Image
 from math import sqrt, cos, sin, radians
@@ -9,33 +6,26 @@ from folium.plugins import SemiCircle
 
 
 geo = [56.62468857, 47.89476849]
-azimut = 180
+azimut = 245
 head = 45
-distance = 0.45091523185115
+distance = 0.009364
 sunRiseAzimut = 67.22
 sunSetAzimut = 292.31
 
-# geo_objekt = [56.62692835, 47.94006479575362]
-# sunRiseGeo = [56.61795653688834, 47.76909006818436]
-# sunSetGeo = [56.63448190718452, 47.952252753240984]
-# sunDayHigh= [56.64713072839149, 47.869168648679214]
 m = folium.Map(location= geo, zoom_start=12,)
 
-"""получение радиуса горионта"""
+"""получение радиуса горизонта"""
 def radius_gorizont():
-    d = 3.57 * sqrt(1.70) *1000
-    #r = d/2*1000
-    print(d)
+    d = 3.57 * sqrt(1.7) * 1000
     return float(d)
 
 
-def geo_objekt(geo,azimut):
+def geo_objekt(geo, azimut, distance=0.009364):
     geo_objekt = []
-    end_lat = geo[0] + 0.009364 * radius_gorizont()/1000 * cos(radians(azimut))
-    end_lon = geo[1] + 0.009364 * radius_gorizont()/1000 * sin(radians(azimut))
+    end_lat = geo[0] + distance * radius_gorizont()/1000 * cos(radians(azimut))
+    end_lon = geo[1] + distance * radius_gorizont()/1000 * sin(radians(azimut))
     geo_objekt.append(end_lat)
     geo_objekt.append(end_lon)
-    print(geo_objekt)
     return geo_objekt
 
 
@@ -50,15 +40,15 @@ folium.CircleMarker(
 ).add_to(m)
 
 
-# """Рисуем на карте искомую точку"""
-# folium.CircleMarker(
-#     location=geo_objekt,
-#     radius=6,
-#     popup="Искомая точка",
-#     color="red",
-#     fill=True,
-#     fillcolor="red"
-# ).add_to(m)
+"""Рисуем на карте искомую точку"""
+folium.CircleMarker(
+    location=geo_objekt(geo, azimut),
+    radius=2,
+    popup="Искомая точка",
+    color="red",
+    fill=True,
+    fillcolor="red"
+).add_to(m)
 
 """Круг видимости горизонта"""
 #folium.plugins.SemiCircle(location=geo, radius=radius_gorizont(), direction=azimut, arc=1 , color= "green" ).add_to(m)
